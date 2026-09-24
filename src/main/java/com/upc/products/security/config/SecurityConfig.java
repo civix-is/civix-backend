@@ -25,7 +25,7 @@ import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity(prePostEnabled = true) //Spring Boot 6 suficiente para habilitar @PreAuthorize
 public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
