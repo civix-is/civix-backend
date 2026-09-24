@@ -15,6 +15,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Transactional
     @Modifying
-    @Query(value = "INSERT INTO user_roles (user_id, role_id ) VALUES (:user_id, :rol_id)", nativeQuery = true)
+    // Ya no existe la tabla intermedia user_roles: asignar el rol = actualizar users.role_id
+    @Query(value = "UPDATE users SET role_id = :rol_id WHERE id = :user_id", nativeQuery = true)
     public Integer insertUserRol(@Param("user_id") Long user_id, @Param("rol_id") Long rol_id);
 }

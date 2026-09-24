@@ -8,8 +8,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 /**
  * Busca al usuario en la BD por su username.
  * Si no existe → lanza excepción.
@@ -36,9 +36,11 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        Set<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
-                .collect(Collectors.toSet());
+        // Un usuario tiene un solo rol (puede ser null si aún no se le asignó uno)
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        if (user.getRole() != null) {
+            authorities.add(new SimpleGrantedAuthority(user.getRole().getName()));
+        }
 
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getUsername())
