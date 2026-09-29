@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ModelMapperConfig {
 
-    @Bean
+    @Bean // se inyectará en cualquier clase que lo necesite
     public ModelMapper modelMapper() {
         return new ModelMapper();
     }
