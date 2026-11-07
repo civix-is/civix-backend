@@ -6,6 +6,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -42,12 +43,17 @@ public class JwtUtil {
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        // LLENANDO EL PAYLOAD
-        claims.put("name", userDetails.getUsername()); // o nombre real
-        claims.put("email", "cflores@praczis.com");
-        claims.put("role", "ADMIN");
-        claims.put("department", "IT");
-        claims.put("custom_id", 2025);
+
+        // Extraemos el rol real que viene de la base de datos
+        String rolReal = userDetails.getAuthorities().stream()
+                .findFirst()
+                .map(GrantedAuthority::getAuthority)
+                .orElse("ROLE_USER");
+
+        // Llenamos el Payload dinámicamente
+        claims.put("name", userDetails.getUsername());
+        claims.put("rol", rolReal); // Tu frontend lee payloadJson.rol
+
         return createToken(claims, userDetails.getUsername());
     }
 

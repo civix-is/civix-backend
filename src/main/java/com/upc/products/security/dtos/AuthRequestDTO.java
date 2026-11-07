@@ -1,16 +1,15 @@
 package com.upc.products.security.dtos;
 
 public class AuthRequestDTO {
-    private String username;
+    private String correo;
     private String password;
-    // getters and setters
 
-    public String getUsername() {
-        return username;
+    public String getCorreo() {
+        return correo;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 
     public String getPassword() {
