@@ -39,15 +39,15 @@ public class IncidenciaControlador {
         return ResponseEntity.ok(incidenciaServicio.listar());
     }
 
-    @GetMapping("/buscar-por-id/{id}")
+    @GetMapping("/buscar-por-id")
     @PreAuthorize("hasAnyRole('CIUDADANO','ADMINISTRADOR')")
-    public ResponseEntity<IncidenciaDTO> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<IncidenciaDTO> buscarPorId(@RequestParam("id_incidencia") Long id) {
         return ResponseEntity.ok(incidenciaServicio.buscarPorId(id));
     }
 
-    @GetMapping("/estado/{estadoAtencion}")
+    @GetMapping("/buscar-por-estado-atencion")
     @PreAuthorize("hasRole('ADMINISTRADOR')")
-    public ResponseEntity<List<IncidenciaDTO>> buscarPorEstadoAtencion(@PathVariable String estadoAtencion) {
+    public ResponseEntity<List<IncidenciaDTO>> buscarPorEstadoAtencion(@RequestParam("estado_atencion") String estadoAtencion) {
         return ResponseEntity.ok(incidenciaServicio.buscarPorEstadoAtencion(estadoAtencion));
     }
 
@@ -60,7 +60,7 @@ public class IncidenciaControlador {
 
     @DeleteMapping("/eliminar")
     @PreAuthorize("hasRole('ADMINISTRADOR')")
-    public void eliminar(@RequestBody Long id){
+    public void eliminar(@RequestParam("id_incidencia") Long id){
         incidenciaServicio.eliminar(id);
     }
 }

@@ -20,7 +20,7 @@ public class CalificacionControlador {
     @PostMapping("/registrar")
     @PreAuthorize("hasRole('CIUDADANO')")
     public ResponseEntity<CalificacionDTO> registrar(@RequestBody CalificacionDTO calificacionDTO,
-                                                    Authentication authentication){
+                                                     Authentication authentication){
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(calificacionServicio.registrar(calificacionDTO, authentication.getName()));
     }
@@ -33,19 +33,13 @@ public class CalificacionControlador {
 
     @GetMapping("/buscar-por-id")
     @PreAuthorize("hasRole('ADMINISTRADOR')")
-    public ResponseEntity<CalificacionDTO> buscarPorId(
-            @RequestParam(value = "id_calificacion", required = false) Long id_calificacion,
-            @RequestParam(value = "id", required = false) Long id) {
-        Long targetId = id != null ? id : id_calificacion;
-        return ResponseEntity.ok(calificacionServicio.buscarPorId(targetId));
+    public ResponseEntity<CalificacionDTO> buscarPorId(@RequestParam("id_calificacion") Long id) {
+        return ResponseEntity.ok(calificacionServicio.buscarPorId(id));
     }
 
     @GetMapping("/buscar-por-incidencia")
     @PreAuthorize("hasAnyRole('CIUDADANO','ADMINISTRADOR')")
-    public ResponseEntity<CalificacionDTO> buscarPorIncidencia(
-            @RequestParam(value = "id_incidencia", required = false) Long id_incidencia,
-            @RequestParam(value = "idIncidencia", required = false) Long idIncidencia) {
-        Long targetId = idIncidencia != null ? idIncidencia : id_incidencia;
-        return ResponseEntity.ok(calificacionServicio.buscarPorIncidencia(targetId));
+    public ResponseEntity<CalificacionDTO> buscarPorIncidencia(@RequestParam("id_incidencia") Long idIncidencia) {
+        return ResponseEntity.ok(calificacionServicio.buscarPorIncidencia(idIncidencia));
     }
 }

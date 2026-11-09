@@ -28,7 +28,7 @@ public class RolControlador {
     }
 
     @DeleteMapping("/eliminar")
-    public void eliminar(Long id){
+    public void eliminar(@RequestParam("id_rol") Long id){
         rolServicio.eliminar(id);
     }
 }

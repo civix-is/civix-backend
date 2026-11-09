@@ -30,7 +30,7 @@ public class CategoriaControlador {
 
     @GetMapping("/buscar-por-id")
     @PreAuthorize("hasRole('ADMINISTRADOR')")
-    public ResponseEntity<CategoriaDTO> buscarPorId(Long id) {
+    public ResponseEntity<CategoriaDTO> buscarPorId(@RequestParam("id_categoria") Long id) {
         return ResponseEntity.ok(categoriaServicio.buscarPorId(id));
     }
 

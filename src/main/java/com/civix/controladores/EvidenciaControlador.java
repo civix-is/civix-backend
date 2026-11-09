@@ -30,13 +30,13 @@ public class EvidenciaControlador {
 
     @GetMapping("/buscar-por-incidencia")
     @PreAuthorize("hasAnyRole('CIUDADANO','ADMINISTRADOR')")
-    public ResponseEntity<List<EvidenciaDTO>> buscarPorIncidencia(Long idIncidencia){
+    public ResponseEntity<List<EvidenciaDTO>> buscarPorIncidencia(@RequestParam("id_incidencia") Long idIncidencia){
         return ResponseEntity.ok(evidenciaServicio.buscarPorIncidencia(idIncidencia));
     }
 
     @DeleteMapping("/eliminar")
     @PreAuthorize("hasRole('ADMINISTRADOR')")
-    public void eliminar(Long id){
+    public void eliminar(@RequestParam("id_evidencia") Long id){
         evidenciaServicio.eliminar(id);
     }
 }

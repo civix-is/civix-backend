@@ -31,19 +31,19 @@ public class UsuarioControlador {
 
     @GetMapping("/buscar-por-id")
     @PreAuthorize("hasRole('ADMINISTRADOR') or @autorizacion.esUsuarioActual(#id)")
-    public ResponseEntity<UsuarioDTO> buscarPorId(Long id){
+    public ResponseEntity<UsuarioDTO> buscarPorId(@RequestParam("id_usuario") Long id){
         return ResponseEntity.ok(usuarioServicio.buscarPorId(id));
     }
 
     @GetMapping("/buscar-por-correo")
     @PreAuthorize("hasRole('ADMINISTRADOR') or @autorizacion.esCorreoActual(#correo)")
-    public ResponseEntity<UsuarioDTO> buscarPorCorreo(String correo){
+    public ResponseEntity<UsuarioDTO> buscarPorCorreo(@RequestParam("correo") String correo){
         return ResponseEntity.ok(usuarioServicio.buscarPorCorreo(correo));
     }
 
     @DeleteMapping("/eliminar")
     @PreAuthorize("hasRole('ADMINISTRADOR')")
-    public void eliminar(Long id){
+    public void eliminar(@RequestParam("id_usuario") Long id){
         usuarioServicio.eliminar(id);
     }
 }
