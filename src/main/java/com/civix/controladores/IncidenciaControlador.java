@@ -64,4 +64,7 @@ public class IncidenciaControlador {
     public void eliminar(@RequestParam("id_incidencia") Long id){
         incidenciaServicio.eliminar(id);
     }
+
+
+    
 }

@@ -15,4 +15,6 @@ public interface IncidenciaServicio {
     List<IncidenciaDTO> buscarPorEstadoAtencion(String estadoAtencion);
     IncidenciaDTO actualizar(IncidenciaActualizarDTO incidenciaActualizarDTO, String correoUsuario);
     void eliminar(Long id);
+
+
 }
