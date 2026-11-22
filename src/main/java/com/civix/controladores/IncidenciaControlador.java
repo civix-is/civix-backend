@@ -21,7 +21,7 @@ public class IncidenciaControlador {
     private IncidenciaServicio incidenciaServicio;
 
     @PostMapping("/registrar")
-    @PreAuthorize("hasRole('CIUDADANO')")
+    @PreAuthorize("hasAnyRole('CIUDADANO','ADMINISTRADOR')")
     public ResponseEntity<IncidenciaDTO> registrar(@RequestBody IncidenciaRegistroDTO incidenciaRegistroDTO,
                                                    Authentication authentication) {
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -29,7 +29,7 @@ public class IncidenciaControlador {
     }
 
     @GetMapping("/mis-reportes")
-    @PreAuthorize("hasRole('CIUDADANO')")
+    @PreAuthorize("hasAnyRole('CIUDADANO','ADMINISTRADOR')")
     public ResponseEntity<List<IncidenciaDTO>> listarMisReportes(Authentication authentication) {
         return ResponseEntity.ok(incidenciaServicio.listarMisReportes(authentication.getName()));
     }

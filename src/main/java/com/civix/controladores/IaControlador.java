@@ -18,7 +18,7 @@ public class IaControlador {
     private IaServicio iaServicio;
 
     @PostMapping("/mejorar-descripcion")
-    @PreAuthorize("hasRole('CIUDADANO')")
+    @PreAuthorize("hasAnyRole('CIUDADANO','ADMINISTRADOR')")
     public ResponseEntity<MejorarDescripcionResponseDTO> mejorar(
             @Valid @RequestBody MejorarDescripcionRequestDTO dto) {
         return ResponseEntity.ok(new MejorarDescripcionResponseDTO(iaServicio.mejorarDescripcion(dto)));

@@ -18,7 +18,7 @@ public class EvidenciaControlador {
     private EvidenciaServicio evidenciaServicio;
 
     @PostMapping("/registrar")
-    @PreAuthorize("hasRole('CIUDADANO')")
+    @PreAuthorize("hasAnyRole('CIUDADANO','ADMINISTRADOR')")
     public ResponseEntity<EvidenciaDTO> registrar(@RequestBody EvidenciaDTO evidenciaDTO){
         return ResponseEntity.status(HttpStatus.CREATED).body(evidenciaServicio.registrar(evidenciaDTO));
     }

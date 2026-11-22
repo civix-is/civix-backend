@@ -55,8 +55,10 @@ public class SecurityConfig {
                         .requestMatchers("/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/usuario/registrar").permitAll()  // US11
                         .requestMatchers(HttpMethod.GET, "/categoria/listar").permitAll()    // US08
+                        .requestMatchers(HttpMethod.GET, "/incidencia/listar").permitAll()
                         .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated())
+
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(ex -> ex
                         // Sin token / token inválido -> 401
@@ -92,4 +94,5 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
+
 }
