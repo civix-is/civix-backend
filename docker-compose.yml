@@ -1,0 +1,33 @@
+services:
+  db:
+    image: postgres:16
+    container_name: civix-postgres
+    environment:
+      POSTGRES_DB: db_civix
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-123}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d db_civix"]
+      interval: 5s
+      retries: 10
+  api:
+    build: .
+    container_name: civix-api
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/db_civix
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-123}
+      IP_FRONTEND: ${IP_FRONTEND:-http://localhost:4200}
+      IA_API_KEY: ${IA_API_KEY:-}
+    ports:
+      - "8080:8080"
+  front:
+    build: ../civix-frontend
+    container_name: civix-front
+    depends_on:
+      - api
+    ports:
+      - "80:80"

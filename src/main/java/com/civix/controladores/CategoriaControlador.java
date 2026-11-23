@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/categoria")
-@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true", exposedHeaders = "Authorization")
+@CrossOrigin(origins = "${ip.frontend}", allowCredentials = "true", exposedHeaders = "Authorization")
 public class CategoriaControlador {
     @Autowired
     private CategoriaServicio categoriaServicio;
