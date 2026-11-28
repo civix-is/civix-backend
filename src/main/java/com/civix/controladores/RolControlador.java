@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rol")
-@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true", exposedHeaders = "Authorization")
+@CrossOrigin(origins = "${ip.frontend}", allowCredentials = "true", exposedHeaders = "Authorization")
 @PreAuthorize("hasRole('ADMINISTRADOR')")
 public class RolControlador {
     @Autowired
