@@ -7,6 +7,7 @@ import com.civix.entidades.Categoria;
 import com.civix.entidades.HistorialIncidencia;
 import com.civix.entidades.Incidencia;
 import com.civix.entidades.Usuario;
+import com.civix.events.IncidenciaCambioEvent;
 import com.civix.exceptions.BusinessRuleException;
 import com.civix.exceptions.ResourceNotFoundException;
 import com.civix.repositorios.CategoriaRepositorio;
@@ -18,6 +19,7 @@ import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -46,6 +48,8 @@ public class IncidenciaServicioImpl implements IncidenciaServicio {
     private UsuarioRepositorio usuarioRepositorio;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
     @Transactional
     @Override
@@ -97,7 +101,9 @@ public class IncidenciaServicioImpl implements IncidenciaServicio {
             historialIncidenciaRepositorio.save(historialInicial);
         }
 
-        return modelMapper.map(incidencia, IncidenciaDTO.class);
+        IncidenciaDTO respuesta = modelMapper.map(incidencia, IncidenciaDTO.class);
+        eventPublisher.publishEvent(new IncidenciaCambioEvent("CREADA", respuesta, respuesta.getIdIncidencia()));
+        return respuesta;
     }
 
     @Override
@@ -181,7 +187,9 @@ public class IncidenciaServicioImpl implements IncidenciaServicio {
         }
 
         incidencia = incidenciaRepositorio.save(incidencia);
-        return modelMapper.map(incidencia, IncidenciaDTO.class);
+        IncidenciaDTO respuesta = modelMapper.map(incidencia, IncidenciaDTO.class);
+        eventPublisher.publishEvent(new IncidenciaCambioEvent("ACTUALIZADA", respuesta, respuesta.getIdIncidencia()));
+        return respuesta;
     }
 
     @Transactional
@@ -191,6 +199,7 @@ public class IncidenciaServicioImpl implements IncidenciaServicio {
             throw new ResourceNotFoundException("No existe la incidencia con el id: " + id);
         }
         incidenciaRepositorio.deleteById(id);
+        eventPublisher.publishEvent(new IncidenciaCambioEvent("ELIMINADA", null, id));
     }
 
     private void validarRegistro(IncidenciaRegistroDTO dto) {

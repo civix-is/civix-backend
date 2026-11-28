@@ -4,12 +4,15 @@ import com.civix.dtos.IncidenciaActualizarDTO;
 import com.civix.dtos.IncidenciaDTO;
 import com.civix.dtos.IncidenciaRegistroDTO;
 import com.civix.servicios.IncidenciaServicio;
+import com.civix.servicios.IncidenciaStreamServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.List;
 
@@ -19,6 +22,14 @@ import java.util.List;
 public class IncidenciaControlador {
     @Autowired
     private IncidenciaServicio incidenciaServicio;
+    @Autowired
+    private IncidenciaStreamServicio incidenciaStreamServicio;
+
+    @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @PreAuthorize("hasAnyRole('CIUDADANO','ADMINISTRADOR')")
+    public SseEmitter stream() {
+        return incidenciaStreamServicio.suscribir();
+    }
 
     @PostMapping("/registrar")
     @PreAuthorize("hasAnyRole('CIUDADANO','ADMINISTRADOR')")

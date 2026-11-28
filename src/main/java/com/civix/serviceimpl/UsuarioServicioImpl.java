@@ -79,10 +79,10 @@ public class UsuarioServicioImpl implements UsuarioServicio {
     @Transactional
     @Override
     public void eliminar(Long id) {
-        if (!usuarioRepositorio.existsById(id)) {
-            throw new ResourceNotFoundException("No existe el usuario con el id: " + id);
-        }
-        usuarioRepositorio.deleteById(id);
+        Usuario usuario = usuarioRepositorio.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("No existe el usuario con el id: " + id));
+        usuario.setEstado(false);
+        usuarioRepositorio.save(usuario);
     }
 
     // Validaciones del registro (formato y unicidad)

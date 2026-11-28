@@ -1,6 +1,7 @@
 package com.civix.security.config;
 
 import com.civix.security.filters.JwtRequestFilter;
+import jakarta.servlet.DispatcherType;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -52,10 +53,12 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
+                        .dispatcherTypeMatchers(DispatcherType.ASYNC).permitAll()
                         .requestMatchers("/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/usuario/registrar").permitAll()  // US11
                         .requestMatchers(HttpMethod.GET, "/categoria/listar").permitAll()    // US08
                         .requestMatchers(HttpMethod.GET, "/incidencia/listar").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/evidencia/archivo/**").permitAll()
                         .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated())
 

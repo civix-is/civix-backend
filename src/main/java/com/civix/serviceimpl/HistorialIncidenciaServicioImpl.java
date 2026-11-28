@@ -1,9 +1,11 @@
 package com.civix.serviceimpl;
 
 import com.civix.dtos.HistorialIncidenciaDTO;
+import com.civix.dtos.IncidenciaDTO;
 import com.civix.entidades.HistorialIncidencia;
 import com.civix.entidades.Incidencia;
 import com.civix.entidades.Usuario;
+import com.civix.events.IncidenciaCambioEvent;
 import com.civix.exceptions.BusinessRuleException;
 import com.civix.exceptions.ResourceNotFoundException;
 import com.civix.repositorios.HistorialIncidenciaRepositorio;
@@ -13,6 +15,7 @@ import com.civix.servicios.HistorialIncidenciaServicio;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -28,6 +31,8 @@ public class HistorialIncidenciaServicioImpl implements HistorialIncidenciaServi
     private UsuarioRepositorio usuarioRepositorio;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
     @Transactional
     @Override
@@ -55,6 +60,9 @@ public class HistorialIncidenciaServicioImpl implements HistorialIncidenciaServi
         historial.setUsuario(usuario);
         historial.setFechaCambio(LocalDateTime.now());
         historial = historialIncidenciaRepositorio.save(historial);
+        IncidenciaDTO incidenciaDTO = modelMapper.map(incidencia, IncidenciaDTO.class);
+        eventPublisher.publishEvent(
+                new IncidenciaCambioEvent("ACTUALIZADA", incidenciaDTO, incidencia.getIdIncidencia()));
         return modelMapper.map(historial, HistorialIncidenciaDTO.class);
     }
 
